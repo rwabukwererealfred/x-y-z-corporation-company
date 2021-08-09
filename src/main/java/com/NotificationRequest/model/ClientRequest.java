@@ -9,6 +9,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import io.swagger.annotations.ApiModel;
@@ -42,7 +43,8 @@ public class ClientRequest {
 	
 	
 	@ManyToOne
-	private Client client;
+	@JoinColumn(name ="client")
+	private ClientInfo client;
 	
 	public static enum ClientCategory{
 		premium,normal
@@ -106,11 +108,11 @@ public class ClientRequest {
 
 	
 
-	public Client getClient() {
+	public ClientInfo getClient() {
 		return client;
 	}
 
-	public void setClient(Client client) {
+	public void setClient(ClientInfo client) {
 		this.client = client;
 	}
 

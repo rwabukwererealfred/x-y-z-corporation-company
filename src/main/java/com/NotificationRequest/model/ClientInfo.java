@@ -9,10 +9,10 @@ import io.swagger.annotations.ApiModel;
 
 @Entity
 @ApiModel(description = "Client model")
-public class Client {
+public class ClientInfo {
 
 	@Id
-	@Column(name="ID")
+	@Column(name="ID", length = 14)
 	private String id;
 	@Column(name="CLIENT_NAME")
 	private String clientName;
@@ -34,11 +34,11 @@ public class Client {
 		this.clientName = clientName;
 	}
 
-	public Client() {
+	public ClientInfo() {
 		
 	}
 
-	public Client(String clientName) {
+	public ClientInfo(String clientName) {
 		super();
 		this.clientName = clientName;
 	}

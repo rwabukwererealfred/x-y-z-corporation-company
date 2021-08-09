@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.NotificationRequest.dto.ResponseMessage;
-import com.NotificationRequest.model.Client;
+import com.NotificationRequest.model.ClientInfo;
 import com.NotificationRequest.model.ClientRequest;
 import com.NotificationRequest.service.ClientInterface;
 import com.google.common.util.concurrent.RateLimiter;
@@ -50,13 +50,13 @@ public class Controller {
 	public ResponseEntity<?> createClient(@RequestParam("clientName") String clientName,
 			@RequestParam("category") String category) {
 		try {
-			Client client = clientService.saveClient(clientName, category);
+			ClientInfo client = clientService.saveClient(clientName, category);
 			return new ResponseEntity<>(new ResponseMessage("well success saved and Client Id : " + client.getId()),
 					HttpStatus.OK);
 
 		} catch (Exception e) {
-			e.printStackTrace();
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			//e.printStackTrace();
+			return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
 		}
 	}
 
@@ -64,6 +64,7 @@ public class Controller {
 			notes = "Write client identification as parameter")
 	@GetMapping("clientRequest")
 	public List<ClientRequest> clientRequestList(@RequestParam("clientId") String clientId) {
+		
 		return clientService.findClientRateLimite(clientId);
 	}
 

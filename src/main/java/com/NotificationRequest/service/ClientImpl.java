@@ -6,10 +6,12 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import javax.management.RuntimeErrorException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.NotificationRequest.model.Client;
+import com.NotificationRequest.model.ClientInfo;
 import com.NotificationRequest.model.ClientRequest;
 import com.NotificationRequest.model.ClientRequest.ClientCategory;
 import com.NotificationRequest.repository.ClientRepository;
@@ -25,9 +27,9 @@ public class ClientImpl implements ClientInterface {
 	private ClientRequestRepository requestRepository;
 
 	@Override
-	public Client saveClient(String clientName, String category) {
+	public ClientInfo saveClient(String clientName, String category) {
 		String id = createKeyId(clientName);
-		Client client = new Client();
+		ClientInfo client = new ClientInfo();
 		client.setId(id);
 		client.setClientName(clientName);
 		ClientRequest request = new ClientRequest();
@@ -56,13 +58,14 @@ public class ClientImpl implements ClientInterface {
 
 	@Override
 	public List<ClientRequest> findClientRateLimite(String clientId) {
-		return requestRepository.findAll().stream().filter(i -> i.getClient().getId().equals(clientId))
+		List<ClientRequest>list = requestRepository.findAll().stream().filter(i -> i.getClient().getId().equals(clientId))
 				.sorted((x, y) -> y.getStartDate().compareTo(x.getStartDate())).collect(Collectors.toList());
+		return list;
 	}
 
 	@Override
 	public void update(String clientId, String category) {
-		Optional<Client>client = clientRepository.findById(clientId);
+		Optional<ClientInfo>client = clientRepository.findById(clientId);
 		if(client.isPresent()) {
 			Optional<ClientRequest>request = requestRepository.findAll().stream().filter(i->i.getClient().getId().equals(client.get().getId())
 					&& i.getCategory().toString().equals(category)).findAny();
@@ -110,10 +113,12 @@ public class ClientImpl implements ClientInterface {
 			request.setRequestPerMonth(15);
 			request.setRequestPerSecond(4);
 			request.setCategory(ClientCategory.premium);
-		}else {
+		}else if(category.equals(ClientCategory.normal.toString())) {
 			request.setRequestPerMonth(10);
 			request.setRequestPerSecond(2);
 			request.setCategory(ClientCategory.normal);
+		}else {
+			throw new RuntimeException("sorry! category must be (premium) or (normal)");
 		}
 		return request;
 	}
