@@ -24,7 +24,7 @@
 
 ## deployment process
 - `docker pull mysql:latest` to create database image
-- `-docker network create my-network` to create network connection
+- `docker network create my-network` to create network connection
 - `docker container run --name mysqldb --network mysqldb -e MYSQL_ROOT_PASSWORD=admin -e MYSQL_DATABASE=notifier
  -e MYSQL_PASSWORD=admin -d mysql:latest` to create mysql container
 - `docker image build -t notification .` to create project image
