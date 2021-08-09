@@ -17,9 +17,9 @@
 | PUT           |/api/notification/renewRequest  | update Request            |
 
 ## project installation
--install docker in your local machine and apache maven
--swith to project directory and write below command in your terminal
--`mvn clean install` to download dependencies
+- install docker in your local machine and apache maven
+- switch to project directory
+- `mvn clean install` to download dependencies
 - `mvn spring-boot:run` to run project
 
 ## deployment process
